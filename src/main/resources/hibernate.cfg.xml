@@ -16,13 +16,13 @@
         <mapping class="com.app.model.Country"/>
         <mapping class="com.app.model.Customer"/>
         <mapping class="com.app.model.CustomerOrder"/>
-        <mapping class="com.app.model.GuaranteeComponents"/>
         <mapping class="com.app.model.Payment"/>
         <mapping class="com.app.model.Producer"/>
         <mapping class="com.app.model.Product"/>
         <mapping class="com.app.model.Shop"/>
         <mapping class="com.app.model.Stock"/>
         <mapping class="com.app.model.Trade"/>
+        <mapping class="com.app.model.Errors"/>
 
     </session-factory>
 </hibernate-configuration>

@@ -35,6 +35,7 @@ public abstract class AbstractGenericDao<T> implements GenericDao<T> {
             }
             catch(Exception e)
             {
+                e.printStackTrace();
                 if (tx != null)
                 {
                     tx.rollback();
