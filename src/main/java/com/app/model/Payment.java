@@ -14,12 +14,13 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"payment"}))
 public class Payment {
     @Id
     @GeneratedValue
     private Long id;
     @Enumerated(value = EnumType.STRING)
     private EPayment payment;
-    @OneToMany(mappedBy = "payment",cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "payment",cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     private Set<CustomerOrder>customerOrderSet=new HashSet<>();
 }
