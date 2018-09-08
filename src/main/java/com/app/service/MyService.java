@@ -24,7 +24,7 @@ public class MyService {
     private TradeDao tradeDao = new TradeDaoImpl();
     private CustomerOrderDao customerOrderDao = new CustomerOrderDaoImpl();
     private ProducerDao producerDao = new ProducerDaoImpl();
-    private PaymentDao paymentDao=new PaymentDaoImpl();
+    private PaymentDao paymentDao = new PaymentDaoImpl();
     private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
 
@@ -138,13 +138,15 @@ public class MyService {
                 throw new RuntimeException("CATEGORY;CATEGORY IS NOT PRESENT");
             if (!shopDao.getShopByName(shopName).isPresent())
                 throw new RuntimeException("SHOP;SHOP IS NOT PRESENT");
-            if (!productDao.getProductByName(productName).isPresent())
+            if (!productDao.getProductByNameAndCategory(productName, categoryName).isPresent())
                 throw new RuntimeException("PRODUCT;PRODUCT IS NOT PRESENT");
+            if (!stockDao.getStockByProductAndShop(productName, categoryName, shopName).isPresent())
+                throw new RuntimeException("STOCK;PRODUCT IS IN STOCK");
 
             Stock stock = Stock
                     .builder()
                     .quantity(quantity)
-                    .product(productDao.getProductByName(productName).get())
+                    .product(productDao.getProductByNameAndCategory(productName, categoryName).get())
                     .shop(shopDao.getShopByName(shopName).get())
                     .build();
             constraintViolations = validator.validate(stock);
@@ -162,27 +164,62 @@ public class MyService {
         try {
             Set<ConstraintViolation<CustomerOrder>> constraintViolations;
             if (!customerDao.getCustomerByNameSurnameCountry(customerName, customerSurname, customerCountry).isPresent())
-               throw new RuntimeException("CUSTOMER;CUSTOMER IS NOT PRESENT");
-            if (!productDao.getProductByName(productName).isPresent())
+                throw new RuntimeException("CUSTOMER;CUSTOMER IS NOT PRESENT");
+            if (!productDao.getProductByNameAndCategory(productName, productCategory).isPresent())
                 throw new RuntimeException("PRODUCT;PRODUCT IS NOT PRESENT");
             CustomerOrder customerOrder = CustomerOrder
                     .builder()
                     .customer(customerDao.getCustomerByNameSurnameCountry(customerName, customerSurname, customerCountry).get())
                     .date(date)
                     .discount(discount)
-                    .payment(paymentDao.getById(1L).get())
+                    .payment(paymentDao.getPaymentByName(payment.name()).get())
                     .quantity(quantity)
-                    .product(productDao.getProductByName(productName).get())
+                    .product(productDao.getProductByNameAndCategory(productName, productCategory).get())
                     .build();
+
             constraintViolations = validator.validate(customerOrder);
             if (constraintViolations.size() > 0)
                 for (ConstraintViolation<?> violation : constraintViolations)
                     errorsDao.add(Errors.builder().message(violation.getMessage()).date(LocalDate.now()).build());
-            else
+            else {
                 customerOrderDao.add(customerOrder);
+            }
         } catch (RuntimeException r) {
             errorsDao.add(Errors.builder().message(r.getMessage()).date(LocalDate.now()).build());
         }
     }
+
+    public void getInformationAboutProductsWithMaxPriceInCategory() {
+        productDao.getProductsByMaxPriceInCategory().stream().forEach(x -> System.out.println(x));
+    }
+
+    public void getInformationAboutProductsWithCustomers(String country, Integer ageMin, Integer ageMax) {
+        productDao.getProductsByCustomerCountryAndAge(country, ageMin, ageMax).stream().forEach(x -> System.out.println(x));
+    }
+
+    public void getInformationAboutProductsWithGuarantee(EGuarantee... guarantees) {
+        productDao.getProductsByGuarantee(guarantees).stream().forEach(x -> System.out.println(x));
+    }
+
+    public void getInformationAboutShops() {
+        shopDao.getShopsByCountry().stream().forEach(x -> System.out.println(x));
+    }
+
+    public void getInformationAboutProducersWithTradeAndQuantity(String trade, Integer quantity) {
+        producerDao.getProducersByTradeAndQuantity(trade, quantity).stream().forEach(x -> System.out.println(x));
+    }
+
+    public void getInformationAboutProductsWithCustomerNameSurnameAndCountry(String name, String surname, String country) {
+        productDao.getProductsWithCustomerNameSurnameAndCountry(name, surname, country).stream().forEach(x -> System.out.println(x));
+    }
+
+    public void getInformationAboutCustomersWithTheSameCountry() {
+        customerDao.getCustomersWithProductsWithTheSameCountry();
+    }
+
+    public void getInformationAboutOrdersByPriceAndBetweenDates(LocalDate dateMin, LocalDate dateMax, Double price) {
+        customerOrderDao.getCustomerOrdersByPriceAndBetweenDates(dateMin, dateMax, price).stream().forEach(x -> System.out.println(x));
+    }
+
 }
 

@@ -21,10 +21,10 @@ public class Category {
     @Id
     @GeneratedValue
     private Long id;
-    @Pattern(regexp = "^[A-Z\\s]+",message = "CATEGORY;NAME IS NOT CORRECT")
+    @Pattern(regexp = "^[A-Z\\s]+", message = "CATEGORY;NAME IS NOT CORRECT")
     private String name;
-    @OneToMany(mappedBy = "category",cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
-    private Set<Product>productSet=new HashSet<>();
+    @OneToMany(mappedBy = "category", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private Set<Product> productSet = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
@@ -38,5 +38,11 @@ public class Category {
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
+    }
+
+    @Override
+    public String toString() {
+        return "Category:" +
+                " name=" + name;
     }
 }

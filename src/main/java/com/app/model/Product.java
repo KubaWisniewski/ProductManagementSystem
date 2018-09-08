@@ -17,12 +17,12 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name","category_id","producer_id"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "category_id", "producer_id"}))
 public class Product {
     @Id
     @GeneratedValue
     private Long id;
-    @Pattern(regexp = "^[A-Z\\s]+",message = "PRODUCT;NAME IS NOT CORRECT")
+    @Pattern(regexp = "^[A-Z\\s]+", message = "PRODUCT;NAME IS NOT CORRECT")
     private String name;
     @Positive(message = "PRODUCT;PRICE IS NOT POSITIV")
     private Double price;
@@ -32,18 +32,18 @@ public class Product {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "producer_id")
     private Producer producer;
-    @OneToMany(mappedBy = "product",cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
-    private Set<CustomerOrder>customerOrderSet=new HashSet<>();
-    @OneToMany(mappedBy = "product",cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
-    private Set<Stock>stockSet=new HashSet<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private Set<CustomerOrder> customerOrderSet = new HashSet<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private Set<Stock> stockSet = new HashSet<>();
     @ElementCollection(targetClass = EGuarantee.class)
     @CollectionTable(
-            name="guarantee_components",
+            name = "guarantee_components",
             joinColumns = {@JoinColumn(name = "product_id")}
-            )
+    )
     @Column(name = "guarantee_component")
     @Enumerated(EnumType.STRING)
-    private Set<EGuarantee> eGuaranteeSet=new HashSet<>();
+    private Set<EGuarantee> eGuaranteeSet = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
@@ -52,11 +52,22 @@ public class Product {
         Product product = (Product) o;
         return Objects.equals(id, product.id) &&
                 Objects.equals(name, product.name) &&
-                Objects.equals(price, product.price);
+                Objects.equals(price, product.price) &&
+                Objects.equals(category, product.category) &&
+                Objects.equals(producer, product.producer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, price);
+        return Objects.hash(id, name, price, category, producer);
+    }
+
+    @Override
+    public String toString() {
+        return "Product:" +
+                " name=" + name +
+                ", price=" + price+
+                ", category=" + category+
+                ", producer=" + producer;
     }
 }

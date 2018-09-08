@@ -21,7 +21,7 @@ public class Stock {
     @Positive(message = "STOCK;QUANTITY IS NOT POSITIVE")
     private Integer quantity;
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="product_id")
+    @JoinColumn(name = "product_id")
     private Product product;
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "shop_id")
@@ -33,11 +33,21 @@ public class Stock {
         if (o == null || getClass() != o.getClass()) return false;
         Stock stock = (Stock) o;
         return Objects.equals(id, stock.id) &&
-                Objects.equals(quantity, stock.quantity);
+                Objects.equals(quantity, stock.quantity) &&
+                Objects.equals(product, stock.product) &&
+                Objects.equals(shop, stock.shop);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, quantity);
+        return Objects.hash(id, quantity, product, shop);
+    }
+
+    @Override
+    public String toString() {
+        return "Stock:" +
+                " quantity=" + quantity +
+                ", product=" + product +
+                ", shop=" + shop;
     }
 }

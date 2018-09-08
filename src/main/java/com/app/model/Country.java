@@ -23,12 +23,12 @@ public class Country {
     private Long id;
     @Pattern(regexp = "^[A-Z\\s]+", message = "COUNTRY;NAME IS NOT CORRECT")
     private String name;
-    @OneToMany(mappedBy = "country", cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
-    private Set<Customer>customerSet=new HashSet<>();
-    @OneToMany(mappedBy = "country",cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
-    private Set<Producer>producerSet=new HashSet<>();
-    @OneToMany(mappedBy = "country",cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
-    private Set<Shop>shopSet=new HashSet<>();
+    @OneToMany(mappedBy = "country", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private Set<Customer> customerSet = new HashSet<>();
+    @OneToMany(mappedBy = "country", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private Set<Producer> producerSet = new HashSet<>();
+    @OneToMany(mappedBy = "country", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private Set<Shop> shopSet = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
@@ -42,5 +42,11 @@ public class Country {
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
+    }
+
+    @Override
+    public String toString() {
+        return "Country:" +
+                " name=" + name;
     }
 }

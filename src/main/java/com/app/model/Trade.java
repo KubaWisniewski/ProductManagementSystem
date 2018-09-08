@@ -23,8 +23,8 @@ public class Trade {
     private Long id;
     @Pattern(regexp = "^[A-Z\\s]+", message = "TRADE;NAME IS NOT CORRECT")
     private String name;
-    @OneToMany(mappedBy = "trade",cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
-    private Set<Producer>producerSet=new HashSet<>();
+    @OneToMany(mappedBy = "trade", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private Set<Producer> producerSet = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
@@ -38,5 +38,11 @@ public class Trade {
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
+    }
+
+    @Override
+    public String toString() {
+        return "Trade:" +
+                " name='" + name;
     }
 }

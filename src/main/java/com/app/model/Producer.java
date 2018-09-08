@@ -16,12 +16,12 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name","trade_id","country_id"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"name", "trade_id", "country_id"}))
 public class Producer {
     @Id
     @GeneratedValue
     private Long id;
-    @Pattern(regexp = "^[A-Z\\s]+",message = "PRODUCER;NAME IS NOT CORRECT")
+    @Pattern(regexp = "^[A-Z\\s]+", message = "PRODUCER;NAME IS NOT CORRECT")
     private String name;
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "trade_id")
@@ -29,8 +29,8 @@ public class Producer {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "country_id")
     private Country country;
-    @OneToMany(mappedBy = "producer",cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
-    private Set<Product>productSet=new HashSet<>();
+    @OneToMany(mappedBy = "producer", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private Set<Product> productSet = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
@@ -46,5 +46,13 @@ public class Producer {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, trade, country);
+    }
+
+    @Override
+    public String toString() {
+        return "Producer:" +
+                " name=" + name +
+                ", trade=" + trade +
+                ", country=" + country;
     }
 }

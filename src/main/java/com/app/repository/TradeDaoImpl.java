@@ -12,24 +12,24 @@ import java.util.Optional;
 public class TradeDaoImpl extends AbstractGenericDao<Trade> implements TradeDao {
     @Override
     public Optional<Trade> getTradeByName(String name) {
-        Session session=getFactory().openSession();
-        Transaction tx=session.getTransaction();
-        Optional<Trade> trade=Optional.empty();
+        Session session = getFactory().openSession();
+        Transaction tx = session.getTransaction();
+        Optional<Trade> trade = Optional.empty();
 
-        try{
+        try {
             tx.begin();
-            Query query=session.createQuery("select t from Trade t where t.name=:name");
-            query.setParameter("name",name);
-            trade=Optional.ofNullable((Trade) query.uniqueResult());
+            Query query = session.createQuery("select t from Trade t where t.name=:name");
+            query.setParameter("name", name);
+            trade = Optional.ofNullable((Trade) query.uniqueResult());
             tx.commit();
-            if(trade.isPresent())
+            if (trade.isPresent())
                 return trade;
-        }catch (Exception c){
-            if(tx!=null){
+        } catch (Exception c) {
+            if (tx != null) {
                 tx.rollback();
             }
-        }finally {
-            if(session!=null){
+        } finally {
+            if (session != null) {
                 session.close();
             }
         }
