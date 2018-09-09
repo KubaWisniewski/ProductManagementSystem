@@ -210,8 +210,8 @@ public class MyService {
         productDao.getProductsByCustomerCountryAndAge(country, ageMin, ageMax).stream().forEach(x -> System.out.println(x));
     }
 
-    public void getInformationAboutProductsWithGuarantee(EGuarantee... guarantees) {
-        productDao.getProductsByGuarantee(guarantees).stream().forEach(x -> System.out.println(x));
+    public void getInformationAboutProductsWithGuarantee(EGuarantee guarantee) {
+        productDao.getProductsByGuarantee(guarantee).stream().forEach(x -> System.out.println(x));
     }
 
     public void getInformationAboutShops() {

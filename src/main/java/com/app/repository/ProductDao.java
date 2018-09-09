@@ -14,7 +14,7 @@ public interface ProductDao extends GenericDao<Product> {
 
     List<Product> getProductsByCustomerCountryAndAge(String country, Integer ageMin, Integer ageMax);
 
-    List<Product> getProductsByGuarantee(EGuarantee... guarantee);
+    List<Product> getProductsByGuarantee(EGuarantee guarantee);
 
     List<Product> getProductsWithCustomerNameSurnameAndCountry(String name, String surname, String country);
 }

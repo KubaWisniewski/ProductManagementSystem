@@ -91,14 +91,14 @@ public class ProductDaoImpl extends AbstractGenericDao<Product> implements Produ
     }
 
     @Override
-    public List<Product> getProductsByGuarantee(EGuarantee... guarantee) {
+    public List<Product> getProductsByGuarantee(EGuarantee guarantee) {
         Session session = getFactory().openSession();
         Transaction tx = session.getTransaction();
         List<Product> res = new ArrayList<>();
         try {
             tx.begin();
             Query query = session.createQuery("select pro from Product pro  join pro.eGuaranteeSet g where g=:enumeration group by pro.category.name");
-            query.setParameter("enumeration", guarantee[0]);
+            query.setParameter("enumeration", guarantee);
             res = query.getResultList();
             //res.forEach(x -> System.out.println(x));
             tx.commit();

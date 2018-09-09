@@ -44,7 +44,7 @@ public class CustomerDaoImpl extends AbstractGenericDao<Customer> implements Cus
         Transaction tx = session.getTransaction();
         try {
             tx.begin();
-            Query query = session.createQuery("select c from Customer c join c.customerOrderSet co where c.country.name=co.product.producer.country.name group by c.name");
+            Query query = session.createQuery("select c from Customer c join c.customerOrderSet co where c.country.name=co.product.producer.country.name group by c");
             List<Customer> res = query.getResultList();
             res.forEach(x -> System.out.println(x.toString()));
             tx.commit();
