@@ -49,7 +49,6 @@ public class CustomerDaoImpl extends AbstractGenericDao<Customer> implements Cus
             res.forEach(x -> System.out.println(x.toString()));
             tx.commit();
         } catch (Exception c) {
-            c.printStackTrace();
             if (tx != null) {
                 tx.rollback();
             }

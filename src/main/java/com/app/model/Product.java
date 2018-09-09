@@ -24,7 +24,7 @@ public class Product {
     private Long id;
     @Pattern(regexp = "^[A-Z\\s]+", message = "PRODUCT;NAME IS NOT CORRECT")
     private String name;
-    @Positive(message = "PRODUCT;PRICE IS NOT POSITIV")
+    @Positive(message = "PRODUCT;PRICE IS NOT POSITIVE")
     private Double price;
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "category_id")
@@ -66,8 +66,8 @@ public class Product {
     public String toString() {
         return "Product:" +
                 " name=" + name +
-                ", price=" + price+
-                ", category=" + category+
+                ", price=" + price +
+                ", category=" + category +
                 ", producer=" + producer;
     }
 }

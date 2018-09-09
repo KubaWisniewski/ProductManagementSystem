@@ -42,18 +42,17 @@ public class ProducerDaoImpl extends AbstractGenericDao<Producer> implements Pro
     public List<Producer> getProducersByTradeAndQuantity(String trade, Integer quantity) {
         Session session = getFactory().openSession();
         Transaction tx = session.getTransaction();
-        List<Producer> res=new ArrayList<>();
+        List<Producer> res = new ArrayList<>();
         try {
             tx.begin();
             Query query = session.createQuery("SELECT p from Stock s join s.product pp join pp.producer p join p.trade t where t.name=:brandName GROUP BY p.name HAVING sum(s.quantity)>:quantity");
             query.setParameter("brandName", trade);
             query.setParameter("quantity", new Long(quantity));
-            res=query.getResultList();
+            res = query.getResultList();
             //res.stream().forEach(x -> System.out.println(x));
             tx.commit();
             return res;
         } catch (Exception c) {
-            c.printStackTrace();
             if (tx != null) {
                 tx.rollback();
             }

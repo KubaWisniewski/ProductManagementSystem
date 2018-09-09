@@ -131,23 +131,23 @@ public class MyService {
         }
     }
 
-    public void addProductToStock(String productName, String categoryName, String shopName,String shopCountryName, Integer quantity) {
+    public void addProductToStock(String productName, String categoryName, String shopName, String shopCountryName, Integer quantity) {
         try {
             Set<ConstraintViolation<Stock>> constraintViolations;
             if (!categoryDao.getCategotyByName(categoryName).isPresent())
                 throw new RuntimeException("CATEGORY;CATEGORY IS NOT PRESENT");
-            if (!shopDao.getShopByNameAndCountry(shopName,shopCountryName).isPresent())
+            if (!shopDao.getShopByNameAndCountry(shopName, shopCountryName).isPresent())
                 throw new RuntimeException("SHOP;SHOP IS NOT PRESENT");
             if (!productDao.getProductByNameAndCategory(productName, categoryName).isPresent())
                 throw new RuntimeException("PRODUCT;PRODUCT IS NOT PRESENT");
-            if (!stockDao.getStockByProductAndShop(productName, categoryName, shopName,shopCountryName).isPresent())
+            if (!stockDao.getStockByProductAndShop(productName, categoryName, shopName, shopCountryName).isPresent())
                 throw new RuntimeException("STOCK;PRODUCT IS IN STOCK");
 
             Stock stock = Stock
                     .builder()
                     .quantity(quantity)
                     .product(productDao.getProductByNameAndCategory(productName, categoryName).get())
-                    .shop(shopDao.getShopByNameAndCountry(shopName,shopCountryName).get())
+                    .shop(shopDao.getShopByNameAndCountry(shopName, shopCountryName).get())
                     .build();
             constraintViolations = validator.validate(stock);
             if (constraintViolations.size() > 0)
@@ -160,18 +160,18 @@ public class MyService {
         }
     }
 
-    public void addOrder(String customerName, String customerSurname, String customerCountry, String productName,String productCategory,String shopName,String shopCountryName ,Integer quantity, LocalDate date, Double discount, EPayment payment) {
+    public void addOrder(String customerName, String customerSurname, String customerCountry, String productName, String productCategory, String shopName, String shopCountryName, Integer quantity, LocalDate date, Double discount, EPayment payment) {
         try {
             Set<ConstraintViolation<CustomerOrder>> constraintViolations;
             if (!customerDao.getCustomerByNameSurnameCountry(customerName, customerSurname, customerCountry).isPresent())
                 throw new RuntimeException("CUSTOMER;CUSTOMER IS NOT PRESENT");
             if (!productDao.getProductByNameAndCategory(productName, productCategory).isPresent())
                 throw new RuntimeException("PRODUCT;PRODUCT IS NOT PRESENT");
-            if(!shopDao.getShopByNameAndCountry(shopName,shopCountryName).isPresent())
+            if (!shopDao.getShopByNameAndCountry(shopName, shopCountryName).isPresent())
                 throw new RuntimeException("SHOP;SHOP IS NOT PRESENT");
-            if(!stockDao.getStockByProductAndShop(productName,productCategory,shopName,shopCountryName).isPresent() )
+            if (!stockDao.getStockByProductAndShop(productName, productCategory, shopName, shopCountryName).isPresent())
                 throw new RuntimeException("STOCK;PRODUCT IS NOT PRESENT IN STOCK");
-            if(stockDao.getStockByProductAndShop(productName,productCategory,shopName,shopCountryName).get().getQuantity()<quantity)
+            if (stockDao.getStockByProductAndShop(productName, productCategory, shopName, shopCountryName).get().getQuantity() < quantity)
                 throw new RuntimeException("STOCK;IS NOT ENOUGH PRODUCTS IN STOCK");
 
             CustomerOrder customerOrder = CustomerOrder
@@ -182,7 +182,7 @@ public class MyService {
                     .payment(paymentDao.getPaymentByName(payment.name()).get())
                     .quantity(quantity)
                     .product(productDao.getProductByNameAndCategory(productName, productCategory).get())
-                    .shop(shopDao.getShopByNameAndCountry(shopName,shopCountryName).get())
+                    .shop(shopDao.getShopByNameAndCountry(shopName, shopCountryName).get())
                     .build();
 
             constraintViolations = validator.validate(customerOrder);
@@ -190,9 +190,9 @@ public class MyService {
                 for (ConstraintViolation<?> violation : constraintViolations)
                     errorsDao.add(Errors.builder().message(violation.getMessage()).date(LocalDate.now()).build());
             else {
-                Stock s = stockDao.getStockByProductAndShop(productName,productCategory,shopName,shopCountryName).get();
+                Stock s = stockDao.getStockByProductAndShop(productName, productCategory, shopName, shopCountryName).get();
                 System.out.println(s);
-                s.setQuantity(s.getQuantity()-customerOrder.getQuantity());
+                s.setQuantity(s.getQuantity() - customerOrder.getQuantity());
                 stockDao.update(s);
                 customerOrderDao.add(customerOrder);
             }

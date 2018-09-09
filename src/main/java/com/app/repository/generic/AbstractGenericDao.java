@@ -97,7 +97,7 @@ public abstract class AbstractGenericDao<T> implements GenericDao<T> {
             //System.out.println("---> " + getClass().getGenericSuperclass());
             //System.out.println("---> " + session.get((Class<T>)superclass.getActualTypeArguments()[0],id));
             //op = Optional.of(session.get((Class<T>)superclass.getActualTypeArguments()[0],id));
-            // op=Optional.of((T)session.get(daoType,id));
+            //op=Optional.of((T)session.get(daoType,id));
             //ParameterizedType superclass = (ParameterizedType)getClass().getGenericSuperclass();
             op = Optional.of(session.get(this.entityClass, id));
             tx.commit();
@@ -105,7 +105,6 @@ public abstract class AbstractGenericDao<T> implements GenericDao<T> {
             if (tx != null) {
                 tx.rollback();
             }
-            e.printStackTrace();
         } finally {
             if (session != null) {
                 session.close();

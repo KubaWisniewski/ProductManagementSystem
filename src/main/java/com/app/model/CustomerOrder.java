@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -22,11 +23,12 @@ public class CustomerOrder {
     @Id
     @GeneratedValue
     private Long id;
+    @Positive(message = "CUSTOMERORDER;QUANTITY IS NOT POSITIVE")
     private Integer quantity;
     @DecimalMin(value = "0.0", inclusive = true, message = "CUSTOMERORDER;DISCOUNT IS NOT CORRECT")
     @DecimalMax(value = "1.0", inclusive = true, message = "CUSTOMERORDER;DISCOUNT IS NOT CORRECT")
     private Double discount;
-    @PastOrPresent
+    @PastOrPresent(message = "CUSTOMERORDER;DATE IS NOT CORRECT")
     private LocalDate date;
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "customer_id")
