@@ -13,15 +13,16 @@ import java.util.Optional;
 
 public class ShopDaoImpl extends AbstractGenericDao<Shop> implements ShopDao {
     @Override
-    public Optional<Shop> getShopByName(String name) {
+    public Optional<Shop> getShopByNameAndCountry(String name, String countryName) {
         Session session = getFactory().openSession();
         Transaction tx = session.getTransaction();
         Optional<Shop> shop = Optional.empty();
 
         try {
             tx.begin();
-            Query query = session.createQuery("select s from Shop s where s.name=:name");
+            Query query = session.createQuery("select s from Shop s where s.name=:name and s.country.name=:countryName");
             query.setParameter("name", name);
+            query.setParameter("countryName", countryName);
             shop = Optional.ofNullable((Shop) query.uniqueResult());
             tx.commit();
             if (shop.isPresent())
@@ -42,7 +43,7 @@ public class ShopDaoImpl extends AbstractGenericDao<Shop> implements ShopDao {
     public List<Shop> getShopsByCountry() {
         Session session = getFactory().openSession();
         Transaction tx = session.getTransaction();
-        List<Shop> res= new ArrayList<>();
+        List<Shop> res = new ArrayList<>();
         try {
             tx.begin();
             Query query = session.createQuery("SELECT s from Shop s join s.stockSet ss join ss.product p join p.producer pp where pp.country.name!=s.country.name group by s.name");

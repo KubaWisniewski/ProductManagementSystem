@@ -37,6 +37,9 @@ public class CustomerOrder {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "payment_id")
     private Payment payment;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
 
     @Override
     public boolean equals(Object o) {
@@ -49,12 +52,13 @@ public class CustomerOrder {
                 Objects.equals(date, customerOrder.date) &&
                 Objects.equals(customer, customerOrder.customer) &&
                 Objects.equals(product, customerOrder.product) &&
-                Objects.equals(payment, customerOrder.payment);
+                Objects.equals(payment, customerOrder.payment) &&
+                Objects.equals(shop, customerOrder.shop);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, quantity, discount, date, customer, product, payment);
+        return Objects.hash(id, quantity, discount, date, customer, product, payment, shop);
     }
 
     @Override
@@ -65,7 +69,8 @@ public class CustomerOrder {
                 ", date=" + date +
                 ", customer=" + customer +
                 ", product=" + product +
-                ", payment=" + payment;
+                ", payment=" + payment +
+                ", shop=" + shop;
     }
 }
 

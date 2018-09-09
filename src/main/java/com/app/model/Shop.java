@@ -28,6 +28,8 @@ public class Shop {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "country_id")
     private Country country;
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private Set<CustomerOrder> customerOrderSet = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

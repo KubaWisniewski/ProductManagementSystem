@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class StockDaoImpl extends AbstractGenericDao<Stock> implements StockDao {
     @Override
-    public Optional<Stock> getStockByProductAndShop(String productName, String categoryName, String shopName) {
+    public Optional<Stock> getStockByProductAndShop(String productName, String categoryName, String shopName,String countryName) {
         Session session = getFactory().openSession();
         Transaction tx = session.getTransaction();
         Optional<Stock> stock = Optional.empty();
@@ -20,7 +20,7 @@ public class StockDaoImpl extends AbstractGenericDao<Stock> implements StockDao 
             tx.begin();
             Query query = session.createQuery("select s from Stock s where s.product=:product and s.shop=:shop");
             query.setParameter("product", productDao.getProductByNameAndCategory(productName, categoryName).get());
-            query.setParameter("shop", shopDao.getShopByName(shopName).get());
+            query.setParameter("shop", shopDao.getShopByNameAndCountry(shopName,countryName).get());
             stock = Optional.ofNullable((Stock) query.uniqueResult());
             tx.commit();
             if (stock.isPresent())

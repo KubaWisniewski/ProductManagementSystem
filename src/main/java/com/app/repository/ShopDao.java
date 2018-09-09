@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ShopDao extends GenericDao<Shop> {
-    Optional<Shop> getShopByName(String name);
+    Optional<Shop> getShopByNameAndCountry(String name,String countryName);
 
     List<Shop> getShopsByCountry();
 }
